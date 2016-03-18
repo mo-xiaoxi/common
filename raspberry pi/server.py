@@ -6,6 +6,7 @@
 
 import socket,hashlib
 import time
+import struct
 from threading import Thread
 import traceback
 import threading
@@ -21,6 +22,8 @@ def md5(str):
 
 # 全局变量
 is_ending = False
+sequence = -1
+
 '''
 host为空表示bind可以绑定到所有有效地址上
 port 必须要大于1024
@@ -50,18 +53,23 @@ class UdpReceiver(threading.Thread):
         while not self.thread_stop:
             # 声明全局变量，接收消息后更改  
             global is_ending
+            global sequence
             try:
                 message, cli_address = ser_socket.recvfrom(2048)
-                print "receieve data :",message
+                print "receieving data :",message
             except:
                 traceback.print_exc()
                 continue
             print message,cli_address
-            if message == "end":
-                is_ending = True
-            md=md5(message)
-            ser_socket.sendto(md, cli_address)
-            print "send to ",cli_address,"data:",md                
+            tmp,i=struct.unpack("<3si",message)
+            if i == (sequence+1):
+                sequence = i
+                print "sequence sucessfully ,save it !"
+                if tmp == "end":
+                    is_ending = True
+                md=md5(message)
+                ser_socket.sendto(md, cli_address)
+                print "send to ",cli_address,"data:",md                
 
 
     def stop(self):

@@ -5,6 +5,7 @@
 
 import socket,hashlib
 import time
+import struct
 from  sys import exit 
 def md5(str):
     import hashlib
@@ -32,30 +33,35 @@ except socket.error, msg:
 
 # 设置超时
 Sock.settimeout(time)
-
-# 向服务器发送消息，并判断接收时是否超时，若超时则重发
-
+'''
+向服务器发送消息，并判断接收时是否超时，若超时则重发
+打包一个序列值，保证每个包的唯一性，同时也可以防止由于
+传输时间过长，导致client假阳性误报server没有接受当前
+包，重传问题
+'''
 datas = ['m1','m2','m3','end']
-for data  in datas:
-    if not data:
+
+for i  in range(len(datas)):
+    if not datas[i]:
         print "data error"
         break
-    Sock.sendto(data,ADDR)
-    print 'data',data,'sended ,destination',ADDR
-    md=md5('data')
+    tmp=struct.pack("<3si",datas[i],i)
+    Sock.sendto(tmp,ADDR)
+    print 'data',tmp,'sended ,destination',ADDR
+    md=md5('tmp')
     print md
     while True:
         try:
-            data,address = Sock.recvfrom(bufsiz)
-            if cmp( data , md ):
+            message,address = Sock.recvfrom(bufsiz)
+            if cmp( message , md ):
                 print 'ack successful ! send next packet'
                 break
             else:
                 print "ack data error,send again"
-                Sock.sendto(data,ADDR)
+                Sock.sendto(tmp,ADDR)
         except socket.timeout:
             print "timeout,send again"
-            Sock.sendto(data,ADDR)
+            Sock.sendto(tmp,ADDR)
                
                 
 
