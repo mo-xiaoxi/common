@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 #__Author__ = moxiaoxi
-#___name___ = task1 as server(Bob)
+#___name___ = task2 as server(Bob)
 
 
 import socket,hashlib
@@ -30,7 +30,7 @@ port 必须要大于1024
 bufsiz为缓冲区 我们设置为1K
 '''
 host = 'localhost'  
-port = 23456
+port = 23457
 bufsiz = 1024
 ADDR = (host,port)
 

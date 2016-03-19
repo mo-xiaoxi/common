@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #__Author__ = moxiaoxi
-#___name___ = task1 as client(Alice)
+#___name___ = task2 as client(Alice)
 
 import socket,hashlib
 import time
@@ -19,7 +19,7 @@ def md5(str):
 
     
 host = 'localhost'  
-port = 23456
+port = 23457
 bufsiz = 1024
 ADDR = (host,port)
 time = 5
@@ -48,12 +48,12 @@ for i  in range(len(datas)):
     tmp=struct.pack("<3si",datas[i],i)
     Sock.sendto(tmp,ADDR)
     print 'data',tmp,'sended ,destination',ADDR
-    md=md5('tmp')
+    md=md5(tmp)
     print md
     while True:
         try:
             message,address = Sock.recvfrom(bufsiz)
-            if cmp( message , md ):
+            if message == md:
                 print 'ack successful ! send next packet'
                 break
             else:
