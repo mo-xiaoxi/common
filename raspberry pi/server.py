@@ -103,8 +103,8 @@ class UdpReceiver(threading.Thread):
                 traceback.print_exc()
                 continue
             print message,cli_address
-            message_t,i=struct.unpack("<32si",message)
-            tmp=Dec.decrypt(message_t)
+            data,i=struct.unpack("<32si",message)
+            tmp=Dec.decrypt(data)
 
             if i == (sequence+1):
                 print "sequence sucessfully ,save it !"
@@ -149,6 +149,7 @@ if __name__=='__main__':
     receiveThread = UdpReceiver()
     receiveThread.setDaemon(True)           # 该选项设置后使得主线程退出后子线程同时退出
     receiveThread.start()#开启线程
+    #便于后期扩展
     while True :
         if is_ending: 
             time.sleep(1) 

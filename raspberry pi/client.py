@@ -41,13 +41,6 @@ class prpcrypt():
         return plain_text.rstrip('\0')
 
 
-host = 'localhost'
-port = 23457
-bufsiz = 1024
-ADDR = (host,port)
-time = 5
-k="1231231231231231"
-Enc=prpcrypt(k)
 
 def keyexpand(k,i):
     return md5(k|datas[i])
@@ -76,6 +69,16 @@ def readfile(string):
     else:
         return -1
 
+
+
+host = 'localhost'
+port = 23457
+bufsiz = 1024
+ADDR = (host,port)
+time = 5
+k="1231231231231231"
+
+
 #初始化socket
 try:
     Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -86,7 +89,7 @@ except socket.error, msg:
 # 设置超时
 Sock.settimeout(time)
 
-#文件读取
+#文件读取，获取需要发送的数据
 f = open('input.txt', 'rb')
 datas= pickle.load(f)
 f.close()
@@ -110,11 +113,13 @@ while i<len(datas):
     if not datas[i]:
         print "data error"
         break
-    t1=Enc.encrypt(str(datas[i]))
-    tmp=struct.pack("<32si",t1,i)       #打包
-    Sock.sendto(tmp,ADDR)                   #发包
-    print 'data',tmp,'sended ,destination',ADDR
-    md=md5(tmp)
+    global k
+    Enc=prpcrypt(k)
+    tmp=Enc.encrypt(str(datas[i]))
+    data=struct.pack("<32si",tmp,i)       #打包
+    Sock.sendto(data,ADDR)                   #发包
+    print 'data',data,'sended ,destination',ADDR
+    md=md5(data)
     print md
     while True:
         try:
@@ -128,11 +133,11 @@ while i<len(datas):
                 break
             else:
                 print "ack data error,send again"
-                Sock.sendto(tmp,ADDR)
+                Sock.sendto(data,ADDR)
         except socket.timeout:
 
             print "timeout,send again"
-            Sock.sendto(tmp,ADDR)  #超时重发
+            Sock.sendto(data,ADDR)  #超时重发
 
 
 
