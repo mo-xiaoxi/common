@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "findrank(int*, int):main.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "sort[3]">
+            </PersistentString>
+            <PersistentString
+               value = "sort[4]">
+            </PersistentString>
+            <PersistentString
+               value = "sort[0]">
+            </PersistentString>
+            <PersistentString
+               value = "sort[5]">
+            </PersistentString>
+            <PersistentString
+               value = "sort[1]">
+            </PersistentString>
+            <PersistentString
+               value = "sort[6]">
+            </PersistentString>
+            <PersistentString
+               value = "sort[2]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

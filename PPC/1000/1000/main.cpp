@@ -14,7 +14,7 @@ int main(int argc, const char * argv[]) {
     cin>>line;
     int **raw = new int*[line];
     for(int i=0;i<line;i++){
-        raw[i]=new int [line];
+        raw[i]=new int [line]{0};
         memset(raw[i], 0, sizeof(int)*line*line);
     }
     int **flag = new int*[line];
